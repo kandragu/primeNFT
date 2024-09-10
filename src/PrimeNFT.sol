@@ -6,10 +6,12 @@ import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/
 
 contract PrimeNFT is ERC721Enumerable {
     uint256 public tokenCounter;
+    uint8 constant MAX_SUPPLY = 100;
 
     constructor() ERC721("Prime", "PP") {}
 
     function mint(address _to) external returns (uint256) {
+        require(tokenCounter < MAX_SUPPLY, "Max token supply minted already");
         tokenCounter++;
         uint256 tokenId = tokenCounter;
         _mint(_to, tokenId);
@@ -41,6 +43,7 @@ contract PrimeNFT is ERC721Enumerable {
 
     function getPrimeCount() external view returns (uint256) {
         uint256[] memory tokenIds = tokensOfOwner(msg.sender);
+
         return findAllPrimes(tokenIds);
     }
 
@@ -50,7 +53,9 @@ contract PrimeNFT is ERC721Enumerable {
         uint256 length = tokenIds.length;
 
         for (uint256 i = 0; i < length; i++) {
-            if (isPrime(i)) count++;
+            if (isPrime(tokenIds[i])) {
+                count++;
+            }
         }
     }
 
