@@ -12,9 +12,12 @@ contract PrimeNFT is ERC721Enumerable {
 
     function mint(address _to) external returns (uint256) {
         require(tokenCounter < MAX_SUPPLY, "Max token supply minted already");
+        // uint256 startGas = gasleft();
         tokenCounter++;
         uint256 tokenId = tokenCounter;
         _mint(_to, tokenId);
+        // uint256 gasUsed = startGas - gasleft();
+        // console.log("Gas used:", gasUsed);
         return tokenId;
     }
 
